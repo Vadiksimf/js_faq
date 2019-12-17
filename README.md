@@ -1,2 +1,2 @@
 # js_faq
-Main options in java script
+Tutorial on java script

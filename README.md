@@ -1,2 +1,2 @@
 # js_faq
-Tutorial on java script
+Tutorial for java script

@@ -13,11 +13,11 @@ GAME RULES:
 
 
 
-var score, roundScore, activePlayer, dice;
+var score, roundScore, activePlayer;
 
 scores = [0,0];
-roundScore = [0,0];
-activePlayer = 1;
+roundScore = 0;
+activePlayer = 0;
 
 //Select DOM Object. Setting method
 //document.querySelector('#current-' + activePlayer).textContent = dice;
@@ -39,7 +39,8 @@ document.getElementById('current-1').textContent = '0';
 document.querySelector('.btn-roll').addEventListener('click', function() {
     //1. Random number
     //Random numbers for 1 to 6
-    dice = Math.floor(Math.random()*6)+1;
+    var dice = Math.floor(Math.random() * 6) + 1;
+    console.log(dice);
 
     //2. Display the result
 
@@ -48,8 +49,33 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     diceDOM.src= 'dice-' + dice + '.png';
 
     //3. Update the current score IF result is not 1.
-    document.getElementById('current-' + activePlayer).textContent = dice;
 
-})
+    if (dice !== 1) {
+        //Add score
+        roundScore = roundScore + dice;
+        console.log(roundScore)
+        document.querySelector('#current-' + activePlayer).textContent = roundScore;
+} else {
+        //Next player
+        activePlayer === 1 ? activePlayer = 0 : activePlayer = 1;
+        roundScore = 0;
+
+        document.querySelector('#current-0').textContent = '0';
+        document.querySelector('#current-1').textContent = '0';
+
+        //Change the classes with toggle
+        document.querySelector('.player-0-panel').classList.toggle('active');
+        document.querySelector('.player-1-panel').classList.toggle('active');
+
+        document.querySelector('.dice').style.display = 'none';
+
+        // Change the classes
+        //document.querySelector('.player-0-panel').classList.remove('active');
+        //document.querySelector('.player-1-panel').classList.add('active');
+
+    }
+
+
+});
 
 

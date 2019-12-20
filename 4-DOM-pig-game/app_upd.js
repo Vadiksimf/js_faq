@@ -24,6 +24,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         //1. Random number
     //Random numbers for 1 to 6
     var dice = Math.floor(Math.random() * 6) + 1;
+    var dice1 = Math.floor(Math.random() * 6) + 1;
     
 
     //2. Display the result
@@ -32,8 +33,12 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     diceDOM.style.display = 'block';
     diceDOM.src= 'dice-' + dice + '.png';
 
+    var diceDOM1 = document.querySelector('.dice1');
+    diceDOM1.style.display = 'block';
+    diceDOM1.src= 'dice-' + dice1 + '.png';
+
     //3. Update the current score IF result is not 1.
-    if (pastThrow === 6 && dice === 6) {  
+    /*if (pastThrow === 6 && dice === 6) {  
     pastThrow=0;
     scores[activePlayer] = 0;
     document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
@@ -48,7 +53,19 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     pastThrow=0;
     }
     }
+});*/
+
+if (dice !== 1 && dice1 !== 1) {
+    //Add score
+    roundScore = roundScore + dice + dice1;
+    document.querySelector('#current-' + activePlayer).textContent = roundScore;
+} else {
+nextPlayer();
+pastThrow=0;
+}
+}
 });
+
 
 
 
@@ -86,6 +103,7 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
         if (scores[activePlayer] >= winningScore) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
             document.querySelector('.dice').style.display = 'none';
+            document.querySelector('.dice1').style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
 
@@ -110,7 +128,9 @@ function nextPlayer () {
         document.querySelector('.player-0-panel').classList.toggle('active');
         document.querySelector('.player-1-panel').classList.toggle('active');
 
+        // If you don't want to see previous result, add this code:
         //document.querySelector('.dice').style.display = 'none';
+        //document.querySelector('.dice1').style.display = 'none';
 
         // Change the classes
         //document.querySelector('.player-0-panel').classList.remove('active');
@@ -139,6 +159,7 @@ function init() {
     */
 
     document.querySelector('.dice').style.display = 'none';
+    document.querySelector('.dice1').style.display = 'none';
 
     document.getElementById('score-0').textContent = '0';
     document.getElementById('score-1').textContent = '0';

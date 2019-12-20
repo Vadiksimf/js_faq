@@ -13,15 +13,18 @@ GAME RULES:
 
 
 
-var score, roundScore, activePlayer;
+var score, roundScore, activePlayer, gamePlaying, pastThrow, limit;
 
 init ();
 
+
 document.querySelector('.btn-roll').addEventListener('click', function() {
-    //1. Random number
+
+    if (gamePlaying) {
+        //1. Random number
     //Random numbers for 1 to 6
     var dice = Math.floor(Math.random() * 6) + 1;
-    console.log(dice);
+    
 
     //2. Display the result
 
@@ -30,37 +33,68 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     diceDOM.src= 'dice-' + dice + '.png';
 
     //3. Update the current score IF result is not 1.
-
-    if (dice !== 1) {
+    if (pastThrow === 6 && dice === 6) {  
+    pastThrow=0;
+    scores[activePlayer] = 0;
+    document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
+    nextPlayer();
+    } else if (dice !== 1) {
         //Add score
         roundScore = roundScore + dice;
-        console.log(roundScore)
         document.querySelector('#current-' + activePlayer).textContent = roundScore;
-} else {
+        pastThrow = dice;
+    } else {
     nextPlayer();
+    pastThrow=0;
+    }
     }
 });
 
 
 
 document.querySelector('.btn-hold').addEventListener('click', function() {
-    // Add current score to global score
+
+    if(gamePlaying){
+            // Add current score to global score
     scores[activePlayer] += roundScore;
+
+    // Change the final score
+    limit = document.querySelector('.limit').value;
+    
+    // If you want to create limits with a button
+    /*
+    document.querySelector('.btn-rule').addEventListener('click', function() {
+    limit = document.querySelector('.limit').value;
+    });
+    */
+
+   var winningScore
+
+    //Undefined, 0, null and "" COERCED to fakse
+    // Other values COERCED to true
+    if (limit) {
+        winningScore = limit;
+    } else {
+        winningScore = 100;
+    }
 
     // Update the UI
     document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
     // Check if a player won the game
 
-        if (scores[activePlayer] > 19) {
+        if (scores[activePlayer] >= winningScore) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
             document.querySelector('.dice').style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
 
+            // Stop the game
+            gamePlaying = false;
         } else {
             nextPlayer();
         }
+    }
 });
 
 
@@ -76,7 +110,7 @@ function nextPlayer () {
         document.querySelector('.player-0-panel').classList.toggle('active');
         document.querySelector('.player-1-panel').classList.toggle('active');
 
-        document.querySelector('.dice').style.display = 'none';
+        //document.querySelector('.dice').style.display = 'none';
 
         // Change the classes
         //document.querySelector('.player-0-panel').classList.remove('active');
@@ -91,6 +125,8 @@ function init() {
     scores=[0,0];
     activePlayer=0;
     roundScore=0;
+    gamePlaying=true;
+    pastThrow=0;
 
     //Select DOM Object. Setting method
     //document.querySelector('#current-' + activePlayer).textContent = dice;
@@ -115,8 +151,21 @@ function init() {
     document.querySelector('.player-0-panel').classList.remove('active');
     document.querySelector('.player-0-panel').classList.add('active');
     document.querySelector('.player-1-panel').classList.remove('active');
+};
 
 
-}
+/*
+3 CHALLENGES
+Change the game to follow these rules:
 
-
+1. A player looses his ENTIRE score when he rolls two 6 in a row. 
+After that, it's the next player's turn. (Hint: Always save the previous dice roll 
+in a separate variable)
+2. Add an input field to the HTML where players can set the winning score, 
+so that they can change the predefined score of 100. (Hint: you can read that 
+value with the .value property in JavaScript. This is a good oportunity to use 
+google to figure this out :)
+3. Add another dice to the game, so that there are two dices now. The player 
+looses his current score when one of them is a 1. (Hint: you will need CSS to 
+position the second dice, so take a look at the CSS code for the first one.)
+*/

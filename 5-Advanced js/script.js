@@ -154,7 +154,7 @@ console.log(HeartRate);
 
 
 // Functions returning functions *************************************
-
+/*
 function interviewQuestion(job) {
     if (job === 'designer') {
         return function(name) {
@@ -188,7 +188,38 @@ coderQuestions('Pete');
 // до переменной ('Mark'), потом после запроса выполняется функция 
 // с переменной ('Mark')
 interviewQuestion('teacher')('Mark');
+*/
 
+// IIFE - Immediatle Invoke Funktion Exspression ****************************************
+/*
+function  game() {
+    var score = Math.random()*10;
+    console.log(score >= 5);
+}
+
+game();
+*/
+
+
+// This code below is equal the code upper
+(
+    function() {
+        var score = Math.random()*10;
+        console.log(score >= 5); 
+    }
+)();
+
+//console.log(score);
+
+
+// Using for data privacy, because this code 
+// is not using in GLOBAL variables
+(
+    function(goodLuck) {
+        var score = Math.random()*10;
+        console.log(score >= 5 - goodLuck); 
+    }
+)(5);
 
 
 

@@ -61,7 +61,7 @@ var jane = Object.create(personProto,
 
 
 // Primitives vs objects
-
+/*
 
 //Primitives
 var a = 23;
@@ -103,16 +103,91 @@ change(age,obj);
 
 console.log(age);
 console.log(obj.city);
+*/
 
 
+// Passing function as argument ************************************************
+
+/*
+var years = [1990, 1975, 1937, 2008, 1999];
 
 
+// Создание функции для использования других функций. Возвращает нам массив
+function arrayCalc(arr, fn) {
+    var arrResult = [];
+    for (var i =0; i < arr.length; i++) {
+        arrResult.push(fn(arr[i]));
+    }
+    return arrResult;
+}
+
+// Рассчет массива с возрастами
+function calculateAge(el) {
+    return 2016 - el;
+}
+
+// Возвращает Булевы значения - есть 18 или нет
+function isFullAge(el) {
+    return el >= 18;
+}
+
+// Максиальная частота сокращения сердца для определенного возраста
+// Берется массив с возрастами (элемент arr функции arrayCalc) и добавляется
+// в функцию (аргумент fn функции arrayCalc = maxHeartRate)
+function maxHeartRate (el) {
+    if (el >= 18 && el <=81) {
+    return Math.round(206.9 - (0.67 * el));
+    } else {
+        return -1;}
+}
+
+var ages = arrayCalc(years, calculateAge);
+
+var fullAges = arrayCalc(ages, isFullAge);
+
+var HeartRate = arrayCalc(ages, maxHeartRate)
+
+console.log(ages);
+console.log(fullAges);
+console.log(HeartRate);
+*/
 
 
+// Functions returning functions *************************************
+
+function interviewQuestion(job) {
+    if (job === 'designer') {
+        return function(name) {
+            console.log(name + ', can you please explain what is UX design is?');
+        } 
+    } else if (job === 'teacher') {
+        return function(name) {
+            console.log(name + ', what subject do you teach?');
+        }
+    } else {
+        return function (name) {
+            console.log('So, what do you do, ' + name + '?');
+        }
+    }
+}
+
+var teacherQuestions = interviewQuestion('teacher');
+var designerQuestions = interviewQuestion('designer');
+var coderQuestions = interviewQuestion('coder');
+
+teacherQuestions('John');
+// Переменная запускает функцию interviewQuestion('teacher');
+// Возвращается результат в виде function(name)
+// function(name) приравнивается к teacherQuestions('John');
+// Выполняется функция.
+designerQuestions('Julius');
+coderQuestions('Pete');
 
 
-
-
+// Другой путь вывода функции. Сначала выполняется левая часть
+// до переменной ('Mark'), потом после запроса выполняется функция 
+// с переменной ('Mark')
+interviewQuestion('teacher')('Mark');
 
 
 

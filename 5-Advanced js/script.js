@@ -200,7 +200,7 @@ function  game() {
 game();
 */
 
-
+/*
 // This code below is equal the code upper
 (
     function() {
@@ -220,6 +220,74 @@ game();
         console.log(score >= 5 - goodLuck); 
     }
 )(5);
+*/
+
+
+// Closures ************************************************************************************
+/*
+
+function retirement(retirementAge) {
+    var a = ' years left until retirement.';
+    return function(yearOfBirth) {
+        var age = 2019 - yearOfBirth;
+        console.log((retirementAge - age) + a);
+    }
+}
+
+var retirementUS = retirement(66);
+
+
+retirementUS(1990);
+retirement(66)(1990);
+// Algoritm:
+// 1. Programm read and run function from left to right
+// 2. So it's run retirement(66), and function return result, another function
+// 3. Than variable (1990) add to this function function(yearOfBirth) and runs...
+// (1990) = (yearOfBirth)
+// 4. We get the result
+var retirementGE = retirement(65);
+var retirementICE = retirement(67);
+retirementGE(1990);
+retirementICE(1990);
+
+/* Rebuild this function with closures
+
+function interviewQuestion(job) {
+    if (job === 'designer') {
+        return function(name) {
+            console.log(name + ', can you please explain what is UX design is?');
+        } 
+    } else if (job === 'teacher') {
+        return function(name) {
+            console.log(name + ', what subject do you teach?');
+        }
+    } else {
+        return function (name) {
+            console.log('So, what do you do, ' + name + '?');
+        }
+    }
+}
+*/
+/*
+function interviewQuestion(job) {
+    return function(name) {
+        if (job === 'designer') {
+            console.log(name + ', can you please explain what is UX design is?');
+        } else if (job === 'teacher') {
+            console.log(name + ', what subject do you teach?');
+        } else {
+            console.log('So, what do you do, ' + name + '?');
+        }
+    }
+}
+
+var interviewDesigner = interviewQuestion('designer');
+interviewDesigner('Julius');
+*/
+
+// Bind, call and apply methods
+
+
 
 
 

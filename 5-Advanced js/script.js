@@ -285,7 +285,72 @@ var interviewDesigner = interviewQuestion('designer');
 interviewDesigner('Julius');
 */
 
-// Bind, call and apply methods
+// Bind, call and apply methods***************************************************************************************************
+/*
+var mark = {
+    name: 'Mark',
+    age: 27,
+    job: 'teacher',
+    presentation: function(style, timeOfDay) {
+        if (style === 'formal') {
+            console.log('Good ' + timeOfDay + ', ladies and gentelmens! I\'m ' 
+            + this.name + '. And i\'m a ' + this.age + ' years old ' + this.job + '.');
+        } else if (style === 'casual'){
+            console.log('Hey! What\'s up! I\'m a ' + this.name + ', ' + this.age + ' years old ' + this.job + '. ' +
+            'Have a nise ' + timeOfDay + '!');
+        }
+    }
+};
+
+mark.presentation('casual', 'morning');
+
+var emily = {
+    name: 'Emily',
+    age: 30,
+    job: 'soldier',
+};
+
+mark.presentation.call(emily, 'formal', 'afternoon');
+
+//mark.presentation.apply(emily, ['formal', 'aftrnoon'])
+
+var markCasual = 
+mark.presentation.bind(mark, 'casual');
+markCasual('morning');
+
+var emilyFormal = mark.presentation.bind(emily, 'formal');
+emilyFormal('night');
+
+
+//-------------------------------------------------------------------------------------
+
+var years = [1990, 1975, 1937, 2008, 1999];
+
+// Создание функции для использования других функций. Возвращает нам массив
+function arrayCalc(arr, fn) {
+    var arrResult = [];
+    for (var i =0; i < arr.length; i++) {
+        arrResult.push(fn(arr[i]));
+    }
+    return arrResult;
+}
+
+// Рассчет массива с возрастами
+function calculateAge(el) {
+    return 2019 - el;
+}
+
+// Возвращает Булевы значения - есть 18 или нет
+function isFullAge(limit, el) {
+    return el >= limit;
+}
+
+var ages = arrayCalc(years, calculateAge);
+var fullJapan = arrayCalc(ages, isFullAge.bind(this,20));
+console.log(ages);
+console.log(fullJapan);
+*/
+
 
 
 

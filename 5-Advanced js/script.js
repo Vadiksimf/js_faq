@@ -376,58 +376,71 @@ c) correct answer (I would use a number for this)
 7. Suppose this code would be a plugin for other programmers to use in their code. So make sure that all your code is private and doesn't interfere with the other programmers code (Hint: we learned a special technique to do exactly that).
 */
 
-var arrayQuestions = [];
 
-var Question = function(question, answers, correctAnswer) {
-    this.question = question;
-    this.answers = answers;
-    this.correctAnswer = correctAnswer;
-};
+(function(){
+    alert('Are you ready to game?');
 
-var q1 = new Question(
-    'How to define variable \'name\' in Javascript?',
-    ['0. var name','1. define name','2. just name'],
-    0
-);
-
-
-var q2 = new Question(
-    'Who was the creator of Microsoft?',
-    ['0. Steve Jobs', '1. Bill Gates', '2. Steve Gates'],
-    1
-);
-
-var q3 = new Question(
-    'In which language maded this quiz?',
-    ['0. Javascript', '1. CSS', '2. HTML5', '3. Russian'],
-    0
-);
-
-
-// Creating a function for add new questions in arrayQuestions
-var addToQuestions = function(el) {
-    return arrayQuestions.push(el)
-};
-
-addToQuestions(q1);
-addToQuestions(q2);
-addToQuestions(q3);
-//-------------------------------------------------------------
-
-var random = Math.floor(Math.random() * arrayQuestions.length);
-
-Question.prototype.task = function () {
-    console.log(this.question);
-    for (var i = 0; i < this.answers.length; i++) {
-        console.log(this.answers[i]);
-    }
-};
-
-console.log(arrayQuestions[random].task());
-
-
-
-
+    var arrayQuestions = [];
+    
+    function Question(question, answers, correctAnswer) {
+        this.question = question;
+        this.answers = answers;
+        this.correctAnswer = correctAnswer;
+    };
+    
+    var q1 = new Question(
+        'How to define variable \'name\' in Javascript?',
+        ['0. var name','1. define name','2. just name'],
+        0
+    );
+    
+    
+    var q2 = new Question(
+        'Who was the creator of Microsoft?',
+        ['0. Steve Jobs', '1. Bill Gates', '2. Steve Gates'],
+        1
+    );
+    
+    var q3 = new Question(
+        'In which language maded this quiz?',
+        ['0. Russian', '1. CSS', '2. HTML5', '3. Javascript'],
+        3
+    );
+    
+    
+    // Creating a function for add new questions in arrayQuestions
+    var addToQuestions = function(el) {
+        return arrayQuestions.push(el)
+    };
+    
+    addToQuestions(q1);
+    addToQuestions(q2);
+    addToQuestions(q3);
+    //-------------------------------------------------------------
+    
+    var random = Math.floor(Math.random() * arrayQuestions.length);
+    
+    Question.prototype.task = function () {
+        console.log(this.question);
+        for (var i = 0; i < this.answers.length; i++) {
+            console.log(this.answers[i]);
+        }
+    };
+    
+    Question.prototype.checkAnswer = function (ans) {
+        if (ans === arrayQuestions[random].correctAnswer) {
+            console.log('You are right! Next question.')
+        } else {
+            console.log('Try one more time')
+        }
+    };
+    
+    console.log(arrayQuestions[random].task());
+    
+    var answer = parseInt(prompt('Enter the number of answer. And press \'OK\'. For exit write \'exit\''));
+    
+    arrayQuestions[random].checkAnswer(answer);
+})();
 
 
 

@@ -504,16 +504,25 @@ c) correct answer (I would use a number for this)
     };
     
     // Test on result
-    Question.prototype.checkAnswer = function (ans) {
+    Question.prototype.checkAnswer = function (ans, callback) {
+        var sc;
         if (ans === this.correctAnswer) {
             console.log('You are right! Next question.');
+            sc = callback(true);
         } else {
             console.log('Try one more time')
+            sc = callback(false);
         }
+        this.displayScore(sc);
     };
 
+    Question.prototype.displayScore = function (score) {
+        console.log('Your current score is: ' + score);
+        console.log('------------------------------------------')
+    }
+
     var arrayQuestions = [q1, q2, q3];
-    // Creating a function for add new questions in arrayQuestions
+    /*// Creating a function for add new questions in arrayQuestions
     var addToQuestions = function(el) {
         return arrayQuestions.push(el)
     };
@@ -522,7 +531,18 @@ c) correct answer (I would use a number for this)
     addToQuestions(q2);
     addToQuestions(q3);
     //-------------------------------------------------------------
+*/
+    function score() {
+        var sc = 0; 
+        return function(correctAnswer) {
+            if (correctAnswer){
+                sc++
+            }
+            return sc;
+        }
+    }
 
+    var keepScore = score();
 
     
     function nextQuestion() {
@@ -530,15 +550,12 @@ c) correct answer (I would use a number for this)
 
         arrayQuestions[random].task();
             
-        var answer = parseInt(prompt('Enter the number of answer. And press \'OK\'. For exit write \'exit\''));
-
-        arrayQuestions[random].checkAnswer(answer);
+        var answer = prompt('Enter the number of answer. And press \'OK\'. For exit write \'exit\'');
 
         if (answer !== 'exit') {
-
-        nextQuestion();
+            arrayQuestions[random].checkAnswer(parseInt(answer), keepScore);
+            nextQuestion();
         }
-        
     }
 
     nextQuestion();

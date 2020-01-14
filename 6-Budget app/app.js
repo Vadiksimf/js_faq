@@ -10,14 +10,26 @@ var budgetController = (function() { // (function(){}) - Это означает
 
 var UICOntroller = (function(){
 
+    var DOMStrings = {
+        inputType: '.add__type',
+        inputDs: '.add__description',
+        inputValue: '.add__value',
+        inputButton: '.add__btn'
+    }
+
     return {
             getInput: function () {
                 return {
-                type: document.querySelector('.add__type').value, // Выбирает value, в данном случе между inc и exp
-                description: document.querySelector('.add__description').value, // Выбирает value, в данном случе между inc и exp
-                vvalue: document.querySelector('.add__value').value // Выбирает value, в данном случе между inc и exp
+                type: document.querySelector(DOMStrings.inputType).value, // Выбирает value, в данном случе между inc и exp
+                description: document.querySelector(DOMStrings.inputDs).value, // Выбирает value, в данном случе между inc и exp
+                value: document.querySelector(DOMStrings.inputValue).value // Выбирает value, в данном случе между inc и exp
                 }
-            }
+            },
+
+    getDOMStrings: function () {
+        return DOMStrings;
+    }
+
     };
 }) ();
 
@@ -26,6 +38,8 @@ var UICOntroller = (function(){
 // GLOBAL APP CONTROLLER
 
 var controller = (function (budgetCtrl, UICtrl) {
+
+    var DOM = UICOntroller.getDOMStrings();
 
     var ctrlAddItem = function () {
 
@@ -45,7 +59,7 @@ var controller = (function (budgetCtrl, UICtrl) {
 
     }
 
-   document.querySelector('.add__btn').addEventListener('click', ctrlAddItem);
+   document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
 
    document.addEventListener('keypress', function (event) {
 

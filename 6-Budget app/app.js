@@ -39,7 +39,25 @@ var UICOntroller = (function(){
 
 var controller = (function (budgetCtrl, UICtrl) {
 
-    var DOM = UICOntroller.getDOMStrings();
+    var setupEventLinteners = function () {
+
+        var DOM = UICOntroller.getDOMStrings();
+        
+        document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
+
+        document.addEventListener('keypress', function (event) {
+     
+         if (event.keyCode === 13 || event.which === 13) { // Выбираем действие на "Enter"
+             
+         ctrlAddItem; // То же действие что и при нажатии кнопки
+     
+         }
+     
+        });
+     
+     
+    };
+
 
     var ctrlAddItem = function () {
 
@@ -59,18 +77,13 @@ var controller = (function (budgetCtrl, UICtrl) {
 
     }
 
-   document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
-
-   document.addEventListener('keypress', function (event) {
-
-    if (event.keyCode === 13 || event.which === 13) { // Выбираем действие на "Enter"
-        
-    ctrlAddItem; // То же действие что и при нажатии кнопки
-
-    }
-
-   });
-
+    return { //Автоматический запуск функции EventListener
+        init: function() {
+            setupEventLinteners();
+        }
+    };
 
 
 }) (budgetController, UICOntroller); // Теперь controller знает о других двух модулях (переменных) и может использовать их для рассчетов
+
+controller.init();

@@ -15,7 +15,15 @@ var budgetController = (function() { // (function(){}) - Это означает
     this.value = value;
    };
 
-   // Массивы для хранения данных о доходах и расходах. Для удобности помещены в одну переменнуюы
+   // Массивы для хранения данных о доходах и расходах. Для удобности помещены в одну переменную
+
+   var calculateTotal = function (type) {
+        var sum = 0;
+        data.allItems[type].forEach(function (cur) {
+            sum += cur.value;
+        });
+        data.totals[type] = sum;
+   };
 
    var data = {
        allItems: {
@@ -25,7 +33,9 @@ var budgetController = (function() { // (function(){}) - Это означает
        totals: {
            exp: 0,
            inc: 0
-       }
+       },
+       budget: 0,
+       percentage: -1 // value not exist
    };
 
    return {
@@ -53,6 +63,32 @@ var budgetController = (function() { // (function(){}) - Это означает
         return newItem;
        },
 
+       calculateBudget: function () {
+
+            // Calculate total income and expenses
+            calculateTotal('exp');
+            calculateTotal('inc');
+
+            // Calculate the budget: income - expenses
+            data.budget = data.totals.inc - data.totals.exp;
+
+            // Calculate the percentage of income that we spent
+            if (data.totals.inc > 0) {
+            data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100); 
+        } else {
+            data.parcentage = -1;
+        }
+       },
+
+       getBudget: function () {
+            return {
+                budget: data.budget,
+                totalInc: data.totals.inc,
+                totalExp: data.totals.exp,
+                percentage: data.percentage
+            }
+       },
+
        testing: function() {
            console.log(data);
        }
@@ -78,7 +114,7 @@ var UICOntroller = (function(){
                 return {
                 type: document.querySelector(DOMStrings.inputType).value, // Выбирает value, в данном случе между inc и exp
                 description: document.querySelector(DOMStrings.inputDescription).value, // Выбирает описание
-                value: document.querySelector(DOMStrings.inputValue).value // Выбирает значение
+                value: parseFloat(document.querySelector(DOMStrings.inputValue).value) // Выбирает значение суммы и конвертирует через parseFloat в число
                 }
             },
 
@@ -104,9 +140,24 @@ var UICOntroller = (function(){
         newHtml = newHtml.replace('%description%', obj.description);
         newHtml = newHtml.replace('%value%', obj.value);       
 
-        // Insert HTML into the DOM
+        // Insert or delete HTML into the DOM
 
         document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+    },
+
+    //Очистка полей ввода
+
+    clearFields: function () {
+        var fields, fieldsArr;
+
+        fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
+
+        fieldsArr = Array.prototype.slice.call(fields);
+
+        fieldsArr.forEach(function (current,index,array) {
+            current.value = "";
+        });
+
     },
 
     getDOMStrings: function() {
@@ -140,30 +191,42 @@ var controller = (function (budgetCtrl, UICtrl) {
      
     };
 
+    var updateBudget = function () {
+
+        // 1. Calculate the budget
+        budgetCtrl.calculateBudget();
+
+        // 2. Return the budget
+        var budget = budgetCtrl.getBudget();
+
+        // 2. Display the budget on UI
+        console.log(budget);
+    }
 
     var ctrlAddItem = function () {
 
     // 1. Get the field input data
-
     var input, newItem;
     
     input = UICtrl.getInput();
     console.log(input);
 
-    // 2. Add the item to the budget controller
+    if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
 
+    // 2. Add the item to the budget controller
     newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
     // 3. Add new item to the UI
-
     UICtrl.addListItem(newItem, input.type);
 
-    // 4. Calculate the budget
+    // 4. clear the fields
+    UICtrl.clearFields();
 
-    // 5. Display the budget on UI
-
-
+    // 5. Calculate and update budget
+        updateBudget();
     }
+
+    };
 
     return { //Автоматический запуск функции EventListener
         init: function() {

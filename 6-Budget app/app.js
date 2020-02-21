@@ -106,7 +106,11 @@ var UICOntroller = (function(){
         inputValue: '.add__value',
         inputButton: '.add__btn',
         incomeContainer: '.income__list',
-        expenseContainer: '.expenses__list'
+        expenseContainer: '.expenses__list',
+        budgetLabel: '.budget__value',
+        incomeLabel: '.budget__income--value',
+        expenceLabel: '.budget__expenses--value',
+        percentageLabel: '.budget__expenses--percentage'
     }
 
     return {
@@ -158,6 +162,22 @@ var UICOntroller = (function(){
             current.value = "";
         });
 
+        //fieldsArr[0].focus();
+    },
+
+    displayBudget: function(obj) {
+
+        document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+        document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
+        document.querySelector(DOMStrings.expenceLabel).textContent = obj.totalExp;
+
+        // Проверка на отрацательный процент, если расходы больше доходов
+        if (obj.percentage > 0) {
+            document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%'; 
+        } else {
+            document.querySelector(DOMStrings.percentageLabel).textContent = '---'
+        }
+
     },
 
     getDOMStrings: function() {
@@ -200,7 +220,7 @@ var controller = (function (budgetCtrl, UICtrl) {
         var budget = budgetCtrl.getBudget();
 
         // 2. Display the budget on UI
-        console.log(budget);
+        UICOntroller.displayBudget(budget);
     }
 
     var ctrlAddItem = function () {
@@ -230,6 +250,12 @@ var controller = (function (budgetCtrl, UICtrl) {
 
     return { //Автоматический запуск функции EventListener
         init: function() {
+            UICOntroller.displayBudget({
+                budget: 0,
+                totalInc: 0,
+                totalExp: 0,
+                percentage: -1
+            }); // обнуление при старте программы
             setupEventLinteners();
         }
     };

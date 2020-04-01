@@ -176,8 +176,14 @@ box66.clickMe();
 */
 
 
-// ES5
+///////////////////////////////////////////////////////////
+// Prototype
+
+
 /*
+// ES5 
+
+
 function Person(name) {
     this.name = name;
 }
@@ -186,7 +192,7 @@ Person.prototype.myFriends5 =  function (friends) {
 
     var arr = friends.map(function(el) {
         return this.name + ' is friends with ' + el
-    }.bind(this)); // В функции в строке 193 дает доступ к имени. Прикол ES5 
+    }.bind(this)); // В функции в строке 187 дает доступ к имени. Прикол ES5 
 
     console.log(arr);
 }
@@ -506,7 +512,7 @@ Person6.greeting();
 
 /////////////////////////////////////////////////////////
 // Classes with subclasses
-
+/*
 var Person5 = function(name, yearOfBirth, job) {
     this.name = name;
     this.yearOfBirth = yearOfBirth;
@@ -568,31 +574,110 @@ const johnAthlete6 = new Athlete6 ('John', 1990, 'swimmer', 3, 10);
 
 johnAthlete6.wonMedal();
 johnAthlete6.calculateAge();
-
+*/
 
 
  
 
+////////////////////////////////
+// CODING CHALLENGE
+
+/*
+
+Suppose that you're working in a small town administration, and you're in charge of two town elements:
+1. Parks
+2. Streets
+
+It's a very small town, so right now there are only 3 parks and 4 streets. All parks and streets have a name and a build year.
+
+At an end-of-year meeting, your boss wants a final report with the following:
+1. Tree density of each park in the town (forumla: number of trees/park area)
+2. Average age of each town's park (forumla: sum of all ages/number of parks)
+3. The name of the park that has more than 1000 trees
+4. Total and average length of the town's streets
+5. Size classification of all streets: tiny/small/normal/big/huge. If the size is unknown, the default is normal
+
+All the report data should be printed to the console.
+
+HINT: Use some of the ES6 features: classes, subclasses, template strings, default parameters, maps, arrow functions, destructuring, etc.
+
+*/
+
+let parks, streets;
+parks = [];
+streets = [];
+
+class ObjectData {
+    constructor (name, buildYear) {
+        this.name = name;
+        this.buildYear = buildYear;
+    }
+};
+
+class Parks extends ObjectData {
+    constructor (name, buildYear, numberOfTrees, parkArea) {
+        super (name, buildYear);
+        this.numberOfTrees = numberOfTrees;
+        this.parkArea = parkArea;
+    }
+
+    treeDensity () {
+        let num = this.numberOfTrees / this.parkArea;
+        console.log(`${this.name} park has a tree density of ${num} per square km.`);
+    }
+};
+
+class Streets extends ObjectData {
+    constructor (name, buildYear, streetLength, size = 3) { //size = 3 - параметр по умолчанию
+        super (name, buildYear);
+        this.streetLength = streetLength;
+        this.size = size;
+    }
+
+    classyfyStreet () {
+        const classification = new Map();
+        classification.set(1, 'tiny');
+        classification.set(2, 'small');
+        classification.set(3, 'normal');
+        classification.set(4, 'big');
+        classification.set(5, 'huge');
+        console.log(`${this.name} street build in ${this.buildYear} is a ${classification.get(this.size)} street.`)
+    }
+};
+
+// const averageAge = 
+
+const allParks = [
+    new Parks ('Pobedy', 1888, 1500, 5), 
+    new Parks ('Lenina', 1900, 100, 0.5), 
+    new Parks ('Green', 1950, 1200, 5)
+];
+
+
+const allStreets = [
+    new Streets ('Pushkina', 1900, 100, 2),
+    new Streets ('Krylowa', 1750, 500, 4),
+    new Streets ('Tolstova', 1950, 300, 3),
+    new Streets ('Lermontova', 1850, 50, 1)
+];
 
 
 
+function reportParks(Parks) {
+    console.log('-----------PARKS REPORT-------------')
+        Parks.forEach(el => el.treeDensity())
+    console.log(`Average age of town\'s park is`)
+    let i = 0;
+    while (i < Parks.length) {
+        if(Parks[i].numberOfTrees > 1000) {
+            console.log(`The ${Parks[i].name} park has more than 1000 tress and contain ${Parks[i].numberOfTrees} trees.`)
+        }
+        i++
+    }
+};
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+reportParks(allParks);
 
 
 

@@ -25,7 +25,8 @@
         }
         first();
         */
-
+        ////////////////////////////////////////////////////// OLD WAY - setTimeout
+        /*
         function getRecipie () {
 
             setTimeout(() => {
@@ -51,7 +52,53 @@
 
         }
         getRecipie();
+        */
+        ///////////////////////////////////////////////////////////// Promise
 
+        const getIDs = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve([555,666,777,888]) // Функция возврата если Промис успешен
+            }, 1500)
+        });
+
+        const getRecipe = recID => {
+            return new Promise((resolve, reject) => {
+                setTimeout(ID => {
+                const recipe = {
+                        title: 'fresh tomato pasta',
+                        publisher: 'Jonas'};
+                resolve(`${ID}: ${recipe.title}`);
+                }, 1500, recID) // recID - это то, что встявляем в ф-ю как ID, через 1,5 сек
+            })
+        };
+
+        const getRelated = publisher => {
+            return new Promise((resolve, reject) => {
+                setTimeout( pub => {
+                    const recipe = {
+                        title: 'Pizza', 
+                        publisher: 'Antonio'};
+                        resolve(`${pub}: ${recipe.title}`);
+                }, 1500, publisher);
+            });
+        };
+
+        getIDs
+        .then(IDs => { // выводится успех, т.е.  первый resolve
+            console.log(IDs);
+            return getRecipe(IDs[2]); // чтобы не делать промис в промисе (добавлется как .then() ниже, после скобок)
+        })
+        .then(recipe => { // выводится второй resolve
+            console.log(recipe);
+            return getRelated('Jonas');
+        })
+        .then(recipe => { // выводится третий resolv
+            console.log(recipe);
+        })
+        .catch(error => { // выводится неудача, т.е. reject
+            console.log('Error!!');
+        });
+        
     </script>
 </body>
 </html>
